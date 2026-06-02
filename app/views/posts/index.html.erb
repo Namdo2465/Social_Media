@@ -1,0 +1,33 @@
+<h1>Thread City</h1>
+
+<%= link_to "Edit Profile", edit_profile_path %>
+
+<%= button_to "Log out", destroy_user_session_path, method: :delete %>
+
+<h2>Create Post</h2>
+
+<%= form_with model: @post do |form| %>
+  <div>
+    <%= form.text_area :content, placeholder: "What's on your mind?" %>
+  </div>
+
+  <%= form.submit "Post" %>
+<% end %>
+
+<h2>Feed</h2>
+
+<% @posts.each do |post| %>
+  <div>
+    <p>
+      <strong><%= post.user.profile.name %></strong>
+    </p>
+
+    <p><%= post.content %></p>
+
+    <% if post.user == current_user %>
+      <%= button_to "Delete", post_path(post), method: :delete %>
+    <% end %>
+  </div>
+
+  <hr>
+<% end %>
