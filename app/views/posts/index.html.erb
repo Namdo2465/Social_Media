@@ -45,6 +45,16 @@
         <%= form.text_field :content, placeholder: "Write a comment..." %>
         <%= form.submit "Comment" %>
     <% end %>
+
+    <p><%= post.likes.count %> likes</p>
+
+    <% like = post.likes.find_by(user: current_user) %>
+
+    <% if like %>
+        <%= button_to "Unlike", post_like_path(post, like), method: :delete %>
+    <% else %>
+        <%= button_to "Like", post_likes_path(post), method: :post %>
+    <% end %>
   </div>
 
   <hr>
