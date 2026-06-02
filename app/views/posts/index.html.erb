@@ -27,6 +27,24 @@
     <% if post.user == current_user %>
       <%= button_to "Delete", post_path(post), method: :delete %>
     <% end %>
+
+    <h4>Comments</h4>
+
+    <% post.comments.each do |comment| %>
+        <p>
+            <strong><%= comment.user.profile.name %>:</strong>
+            <%= comment.content %>
+
+            <% if comment.user == current_user %>
+            <%= button_to "Delete", post_comment_path(post, comment), method: :delete %>
+            <% end %>
+        </p>
+    <% end %>
+
+    <%= form_with model: [post, Comment.new] do |form| %>
+        <%= form.text_field :content, placeholder: "Write a comment..." %>
+        <%= form.submit "Comment" %>
+    <% end %>
   </div>
 
   <hr>

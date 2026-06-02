@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
+  get "comments/create"
+  get "comments/destroy"
   get "posts/index"
   get "posts/create"
   get "posts/destroy"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resource :profile, only: [:edit, :update]
-  resources :posts, only: [:index, :create, :destroy]
+  resources :posts, only: [:index, :create, :destroy] do
+    resources :comments, only: [:create, :destroy]
+  end
+
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
