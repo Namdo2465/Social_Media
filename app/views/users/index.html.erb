@@ -2,10 +2,31 @@
 
 <%= link_to "Back to Feed", root_path %>
 
+<h2>Follow Requests Received</h2>
+
+<% current_user.received_follow_requests.where(status: "pending").each do |request| %>
+  <p>
+    <%= request.sender.profile.name %>
+    wants to follow you.
+
+    <%= button_to "Accept", follow_request_path(request), method: :patch %>
+    <%= button_to "Reject", follow_request_path(request), method: :delete %>
+  </p>
+<% end %>
+
+<h2>Users</h2>
+
 <% @users.each do |user| %>
   <div>
     <h3><%= link_to user.profile.name, user_path(user) %></h3>
-    <p><%= user.email %></p>
+
+    <% if current_user.following?(user) %>
+      <p>Following</p>
+    <% elsif current_user.pending_follow_request_to?(user) %>
+      <p>Pending</p>
+    <% else %>
+      <%= button_to "Follow", follow_requests_path(receiver_id: user.id), method: :post %>
+    <% end %>
   </div>
 
   <hr>

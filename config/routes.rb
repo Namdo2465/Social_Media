@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "follow_requests/create"
+  get "follow_requests/update"
+  get "follow_requests/destroy"
   get "users/index"
   get "users/show"
   get "likes/create"
@@ -16,6 +19,7 @@ Rails.application.routes.draw do
     resources :likes, only: [:create, :destroy]
   end
   resources :users, only: [:index, :show]
+  resources :follow_requests, only: [:create, :update, :destroy]
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
