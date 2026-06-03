@@ -1,63 +1,106 @@
-<h1>Thread City</h1>
+<section class="feed-layout">
+  <aside class="sidebar-panel profile-summary">
+    <div class="avatar large"><%= current_user.profile.name.first.upcase %></div>
+    <div>
+      <p class="eyebrow">Signed in as</p>
+      <h1><%= current_user.profile.name %></h1>
+      <p><%= current_user.profile.bio.presence || "Your profile is ready for a short bio." %></p>
+    </div>
+    <%= link_to "Find people", users_path, class: "button full" %>
+  </aside>
 
-<%= link_to "All Users", users_path %>
+  <div class="feed-main">
+    <section class="composer card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">New thread</p>
+          <h2>Share an update</h2>
+        </div>
+      </div>
 
-<%= link_to "Edit Profile", edit_profile_path %>
+      <%= form_with model: @post, class: "composer-form" do |form| %>
+        <%= form.text_area :content, placeholder: "What's on your mind?", rows: 4 %>
+        <div class="form-actions">
+          <%= form.submit "Post", class: "button primary" %>
+        </div>
+      <% end %>
+    </section>
 
-<%= button_to "Log out", destroy_user_session_path, method: :delete %>
+    <section class="timeline">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Latest</p>
+          <h2>Feed</h2>
+        </div>
+        <span class="count-pill"><%= pluralize(@posts.size, "post") %></span>
+      </div>
 
-<h2>Create Post</h2>
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <article class="post-card card">
+            <header class="post-header">
+              <div class="author">
+                <div class="avatar"><%= post.user.profile.name.first.upcase %></div>
+                <div>
+                  <h3><%= post.user.profile.name %></h3>
+                  <p><%= time_ago_in_words(post.created_at) %> ago</p>
+                </div>
+              </div>
 
-<%= form_with model: @post do |form| %>
-  <div>
-    <%= form.text_area :content, placeholder: "What's on your mind?" %>
+              <% if post.user == current_user %>
+                <%= button_to "Delete", post_path(post), method: :delete, class: "button danger ghost" %>
+              <% end %>
+            </header>
+
+            <p class="post-content"><%= post.content %></p>
+
+            <div class="post-actions">
+              <span><%= pluralize(post.likes.count, "like") %></span>
+              <% like = post.likes.find_by(user: current_user) %>
+
+              <% if like %>
+                <%= button_to "Unlike", post_like_path(post, like), method: :delete, class: "button small active" %>
+              <% else %>
+                <%= button_to "Like", post_likes_path(post), method: :post, class: "button small" %>
+              <% end %>
+            </div>
+
+            <section class="comments">
+              <h4>Comments</h4>
+
+              <% if post.comments.any? %>
+                <div class="comment-list">
+                  <% post.comments.each do |comment| %>
+                    <div class="comment">
+                      <div class="comment-body">
+                        <strong><%= comment.user.profile.name %></strong>
+                        <span><%= comment.content %></span>
+                      </div>
+
+                      <% if comment.user == current_user %>
+                        <%= button_to "Delete", post_comment_path(post, comment), method: :delete, class: "text-button danger" %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p class="empty-copy">No comments yet.</p>
+              <% end %>
+
+              <%= form_with model: [post, Comment.new], class: "comment-form" do |form| %>
+                <%= form.text_field :content, placeholder: "Write a comment..." %>
+                <%= form.submit "Comment", class: "button small" %>
+              <% end %>
+            </section>
+          </article>
+        <% end %>
+      <% else %>
+        <div class="empty-state card">
+          <h3>Your feed is quiet</h3>
+          <p>Follow people or publish your first post to start filling the timeline.</p>
+          <%= link_to "Browse people", users_path, class: "button primary" %>
+        </div>
+      <% end %>
+    </section>
   </div>
-
-  <%= form.submit "Post" %>
-<% end %>
-
-<h2>Feed</h2>
-
-<% @posts.each do |post| %>
-  <div>
-    <p>
-      <strong><%= post.user.profile.name %></strong>
-    </p>
-
-    <p><%= post.content %></p>
-
-    <% if post.user == current_user %>
-      <%= button_to "Delete", post_path(post), method: :delete %>
-    <% end %>
-
-    <h4>Comments</h4>
-
-    <% post.comments.each do |comment| %>
-        <p>
-            <strong><%= comment.user.profile.name %>:</strong>
-            <%= comment.content %>
-
-            <% if comment.user == current_user %>
-            <%= button_to "Delete", post_comment_path(post, comment), method: :delete %>
-            <% end %>
-        </p>
-    <% end %>
-
-    <%= form_with model: [post, Comment.new] do |form| %>
-        <%= form.text_field :content, placeholder: "Write a comment..." %>
-        <%= form.submit "Comment" %>
-    <% end %>
-
-    <p><%= post.likes.count %> likes</p>
-
-    <% like = post.likes.find_by(user: current_user) %>
-
-    <% if like %>
-        <%= button_to "Unlike", post_like_path(post, like), method: :delete %>
-    <% else %>
-        <%= button_to "Like", post_likes_path(post), method: :post %>
-    <% end %>
-  </div>
-
-  <hr>
-<% end %>
+</section>

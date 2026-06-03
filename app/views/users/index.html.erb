@@ -1,33 +1,67 @@
-<h1>All Users</h1>
-
-<%= link_to "Back to Feed", root_path %>
-
-<h2>Follow Requests Received</h2>
-
-<% current_user.received_follow_requests.where(status: "pending").each do |request| %>
-  <p>
-    <%= request.sender.profile.name %>
-    wants to follow you.
-
-    <%= button_to "Accept", follow_request_path(request), method: :patch %>
-    <%= button_to "Reject", follow_request_path(request), method: :delete %>
-  </p>
-<% end %>
-
-<h2>Users</h2>
-
-<% @users.each do |user| %>
-  <div>
-    <h3><%= link_to user.profile.name, user_path(user) %></h3>
-
-    <% if current_user.following?(user) %>
-      <p>Following</p>
-    <% elsif current_user.pending_follow_request_to?(user) %>
-      <p>Pending</p>
-    <% else %>
-      <%= button_to "Follow", follow_requests_path(receiver_id: user.id), method: :post %>
-    <% end %>
+<section class="directory-layout">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Network</p>
+      <h1>People</h1>
+    </div>
+    <%= link_to "Back to feed", root_path, class: "button ghost" %>
   </div>
 
-  <hr>
-<% end %>
+  <section class="card request-panel">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Inbox</p>
+        <h2>Follow requests</h2>
+      </div>
+    </div>
+
+    <% pending_requests = current_user.received_follow_requests.where(status: "pending") %>
+
+    <% if pending_requests.any? %>
+      <div class="request-list">
+        <% pending_requests.each do |request| %>
+          <div class="request-row">
+            <div class="author">
+              <div class="avatar"><%= request.sender.profile.name.first.upcase %></div>
+              <div>
+                <h3><%= request.sender.profile.name %></h3>
+                <p>wants to follow you</p>
+              </div>
+            </div>
+
+            <div class="inline-actions">
+              <%= button_to "Accept", follow_request_path(request), method: :patch, class: "button small primary" %>
+              <%= button_to "Reject", follow_request_path(request), method: :delete, class: "button small ghost danger" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="empty-copy">No pending requests.</p>
+    <% end %>
+  </section>
+
+  <section class="people-grid">
+    <% @users.each do |user| %>
+      <article class="person-card card">
+        <%= link_to user_path(user), class: "person-link" do %>
+          <div class="avatar large"><%= user.profile.name.first.upcase %></div>
+          <div>
+            <h2><%= user.profile.name %></h2>
+            <p><%= user.profile.bio.presence || "No bio yet." %></p>
+          </div>
+        <% end %>
+
+        <div class="person-action">
+          <% if current_user.following?(user) %>
+            <span class="status-pill success">Following</span>
+          <% elsif current_user.pending_follow_request_to?(user) %>
+            <span class="status-pill">Pending</span>
+          <% else %>
+            <%= button_to "Follow", follow_requests_path(receiver_id: user.id), method: :post, class: "button full" %>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </section>
+</section>
