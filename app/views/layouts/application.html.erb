@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Social Media" %></title>
+    <title><%= content_for(:title) || "Thread City" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Social Media">
+    <meta name="application-name" content="Thread City">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -24,6 +24,41 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="app-shell">
+      <header class="topbar">
+        <%= link_to root_path, class: "brand" do %>
+          <span class="brand-mark">TC</span>
+          <span>Thread City</span>
+        <% end %>
+
+        <% if user_signed_in? %>
+          <nav class="topnav" aria-label="Primary">
+            <%= link_to "Feed", root_path %>
+            <%= link_to "People", users_path %>
+            <%= link_to "Profile", edit_profile_path %>
+          </nav>
+
+          <div class="session-actions">
+            <span class="current-user"><%= current_user.profile.name %></span>
+            <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "button ghost" %>
+          </div>
+        <% end %>
+      </header>
+
+      <% if notice.present? || alert.present? %>
+        <div class="flash-stack">
+          <% if notice.present? %>
+            <p class="flash notice"><%= notice %></p>
+          <% end %>
+          <% if alert.present? %>
+            <p class="flash alert"><%= alert %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <main class="page">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

@@ -1,15 +1,29 @@
-<h1>Edit Profile</h1>
-
-<%= form_with model: @profile, url: profile_path do |form| %>
-  <div>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+<section class="settings-page">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Account</p>
+      <h1>Edit profile</h1>
+    </div>
+    <%= link_to "Back to feed", root_path, class: "button ghost" %>
   </div>
 
-  <div>
-    <%= form.label :bio %>
-    <%= form.text_area :bio %>
-  </div>
+  <div class="settings-card card">
+    <div class="avatar jumbo"><%= @profile.name.first.upcase %></div>
 
-  <%= form.submit "Update Profile" %>
-<% end %>
+    <%= form_with model: @profile, url: profile_path, class: "profile-form" do |form| %>
+      <div class="field">
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :bio %>
+        <%= form.text_area :bio, rows: 6 %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Update profile", class: "button primary" %>
+      </div>
+    <% end %>
+  </div>
+</section>

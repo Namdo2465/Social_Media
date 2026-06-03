@@ -1,13 +1,43 @@
-<h1><%= @user.profile.name %></h1>
-
-<p><%= @user.profile.bio %></p>
-
-<h2>Posts</h2>
-
-<% @user.posts.order(created_at: :desc).each do |post| %>
-  <div>
-    <p><%= post.content %></p>
+<section class="profile-page">
+  <div class="profile-hero card">
+    <div class="avatar jumbo"><%= @user.profile.name.first.upcase %></div>
+    <div>
+      <p class="eyebrow">Profile</p>
+      <h1><%= @user.profile.name %></h1>
+      <p><%= @user.profile.bio.presence || "No bio yet." %></p>
+    </div>
   </div>
 
-  <hr>
-<% end %>
+  <section class="timeline narrow">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Recent activity</p>
+        <h2>Posts</h2>
+      </div>
+      <%= link_to "Back to people", users_path, class: "button ghost" %>
+    </div>
+
+    <% if @user.posts.any? %>
+      <% @user.posts.order(created_at: :desc).each do |post| %>
+        <article class="post-card card">
+          <header class="post-header">
+            <div class="author">
+              <div class="avatar"><%= @user.profile.name.first.upcase %></div>
+              <div>
+                <h3><%= @user.profile.name %></h3>
+                <p><%= time_ago_in_words(post.created_at) %> ago</p>
+              </div>
+            </div>
+          </header>
+
+          <p class="post-content"><%= post.content %></p>
+        </article>
+      <% end %>
+    <% else %>
+      <div class="empty-state card">
+        <h3>No posts yet</h3>
+        <p>This profile has not published anything.</p>
+      </div>
+    <% end %>
+  </section>
+</section>
