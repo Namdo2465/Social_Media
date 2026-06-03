@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
 
   after_create :create_default_profile
+  after_create :send_welcome_email
 
   has_many :sent_follow_requests,
           class_name: "FollowRequest",
@@ -40,5 +41,8 @@ class User < ApplicationRecord
   private
   def create_default_profile
     create_profile(name: email.split("@").first)
+  end
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_now
   end
 end
