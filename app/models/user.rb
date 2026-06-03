@@ -10,6 +10,33 @@ class User < ApplicationRecord
 
   after_create :create_default_profile
 
+  has_many :sent_follow_requests,
+          class_name: "FollowRequest",
+          foreign_key: "sender_id",
+          dependent: :destroy
+
+  has_many :received_follow_requests,
+          class_name: "FollowRequest",
+          foreign_key: "receiver_id",
+          dependent: :destroy
+
+  has_many :accepted_sent_follow_requests,
+          -> { where(status: "accepted") },
+          class_name: "FollowRequest",
+          foreign_key: "sender_id"
+
+  has_many :following,
+          through: :accepted_sent_follow_requests,
+          source: :receiver
+
+  def following?(user)
+    following.include?(user)
+  end
+
+  def pending_follow_request_to?(user)
+    sent_follow_requests.exists?(receiver: user, status: "pending")
+  end
+
   private
   def create_default_profile
     create_profile(name: email.split("@").first)

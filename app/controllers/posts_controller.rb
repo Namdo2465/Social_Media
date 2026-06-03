@@ -1,7 +1,13 @@
 class PostsController < ApplicationController
   def index
     @post = current_user.posts.build
-    @posts = Post.includes(:user).order(created_at: :desc)
+  
+    user_ids = current_user.following.pluck(:id) + [current_user.id]
+  
+    @posts = Post
+             .includes(:user, :comments, :likes)
+             .where(user_id: user_ids)
+             .order(created_at: :desc)
   end
 
   def create
