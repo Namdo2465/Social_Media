@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "users/index"
+  get "users/show"
   get "likes/create"
   get "likes/destroy"
   get "comments/create"
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy]
     resources :likes, only: [:create, :destroy]
   end
+  resources :users, only: [:index, :show]
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
