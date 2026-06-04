@@ -7,7 +7,7 @@ image: namdo2465/social_media
 # Deploy to these servers.
 servers:
   web:
-    - ssh ec2-user@47.129.0.253
+    - 47.129.0.253
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -22,7 +22,7 @@ servers:
 #
 proxy:
   ssl: false
-  host: ssh ec2-user@47.129.0.253
+  host: 47.129.0.253
   app_port: 3000
 
 # Where you keep your container images.
@@ -99,7 +99,7 @@ builder:
 
 # Use a different ssh user than root
 ssh:
-  user: ubuntu
+  user: ec2-user
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
@@ -127,7 +127,7 @@ ssh:
 accessories:
   db:
     image: postgres:16
-    host: YOUR_EC2_PUBLIC_IP
+    host: 47.129.0.253
     port: "127.0.0.1:5432:5432"
     env:
       clear:
