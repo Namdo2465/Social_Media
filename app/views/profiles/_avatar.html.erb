@@ -1,0 +1,9 @@
+<% css_class = ["avatar", local_assigns[:size]].compact.join(" ") %>
+
+<div class="<%= css_class %>">
+  <% if profile.avatar.attached? %>
+    <%= image_tag profile.avatar, alt: "#{profile.name} profile picture" %>
+  <% else %>
+    <%= profile.name.first.upcase %>
+  <% end %>
+</div>

@@ -1,6 +1,6 @@
 <section class="profile-page">
   <div class="profile-hero card">
-    <div class="avatar jumbo"><%= @user.profile.name.first.upcase %></div>
+    <%= render "profiles/avatar", profile: @user.profile, size: "jumbo" %>
     <div>
       <p class="eyebrow">Profile</p>
       <h1><%= @user.profile.name %></h1>
@@ -22,7 +22,7 @@
         <article class="post-card card">
           <header class="post-header">
             <div class="author">
-              <div class="avatar"><%= @user.profile.name.first.upcase %></div>
+              <%= render "profiles/avatar", profile: @user.profile %>
               <div>
                 <h3><%= @user.profile.name %></h3>
                 <p><%= time_ago_in_words(post.created_at) %> ago</p>

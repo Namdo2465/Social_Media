@@ -8,9 +8,25 @@
   </div>
 
   <div class="settings-card card">
-    <div class="avatar jumbo"><%= @profile.name.first.upcase %></div>
+    <div class="avatar-editor">
+      <%= render "profiles/avatar", profile: @profile, size: "jumbo" %>
+      <p>JPG, PNG, WEBP, or GIF. Max 5MB.</p>
+    </div>
 
     <%= form_with model: @profile, url: profile_path, class: "profile-form" do |form| %>
+      <% if @profile.errors.any? %>
+        <div class="form-errors">
+          <% @profile.errors.full_messages.each do |message| %>
+            <p><%= message %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= form.label :avatar, "Profile picture" %>
+        <%= form.file_field :avatar, accept: "image/png,image/jpeg,image/webp,image/gif" %>
+      </div>
+
       <div class="field">
         <%= form.label :name %>
         <%= form.text_field :name %>

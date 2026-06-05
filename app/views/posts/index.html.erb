@@ -1,6 +1,6 @@
 <section class="feed-layout">
   <aside class="sidebar-panel profile-summary">
-    <div class="avatar large"><%= current_user.profile.name.first.upcase %></div>
+    <%= render "profiles/avatar", profile: current_user.profile, size: "large" %>
     <div>
       <p class="eyebrow">Signed in as</p>
       <h1><%= current_user.profile.name %></h1>
@@ -40,7 +40,7 @@
           <article class="post-card card">
             <header class="post-header">
               <div class="author">
-                <div class="avatar"><%= post.user.profile.name.first.upcase %></div>
+                <%= render "profiles/avatar", profile: post.user.profile %>
                 <div>
                   <h3><%= post.user.profile.name %></h3>
                   <p><%= time_ago_in_words(post.created_at) %> ago</p>

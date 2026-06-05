@@ -22,7 +22,7 @@
         <% pending_requests.each do |request| %>
           <div class="request-row">
             <div class="author">
-              <div class="avatar"><%= request.sender.profile.name.first.upcase %></div>
+              <%= render "profiles/avatar", profile: request.sender.profile %>
               <div>
                 <h3><%= request.sender.profile.name %></h3>
                 <p>wants to follow you</p>
@@ -45,7 +45,7 @@
     <% @users.each do |user| %>
       <article class="person-card card">
         <%= link_to user_path(user), class: "person-link" do %>
-          <div class="avatar large"><%= user.profile.name.first.upcase %></div>
+          <%= render "profiles/avatar", profile: user.profile, size: "large" %>
           <div>
             <h2><%= user.profile.name %></h2>
             <p><%= user.profile.bio.presence || "No bio yet." %></p>

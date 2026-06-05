@@ -104,6 +104,7 @@ textarea {
   color: white;
   font-size: 0.9rem;
   font-weight: 800;
+  overflow: hidden;
 }
 
 .brand-mark {
@@ -121,6 +122,13 @@ textarea {
   width: 88px;
   height: 88px;
   font-size: 1.8rem;
+}
+
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .topnav {
@@ -285,7 +293,8 @@ label {
 textarea,
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="file"] {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -302,9 +311,25 @@ textarea {
 textarea:focus,
 input[type="text"]:focus,
 input[type="email"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+input[type="file"]:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(23, 107, 135, 0.14);
+}
+
+input[type="file"] {
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
 }
 
 .form-actions {
@@ -573,6 +598,28 @@ form.button_to {
   gap: 22px;
   align-items: start;
   width: min(760px, 100%);
+}
+
+.avatar-editor {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  max-width: 140px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.form-errors {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(180, 35, 24, 0.25);
+  border-radius: 8px;
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--danger);
+  font-weight: 800;
 }
 
 .new_user,
